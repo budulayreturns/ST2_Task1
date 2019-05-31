@@ -12,6 +12,8 @@
 		33A54A5522A1A03B00CA6B0B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 33A54A5422A1A03B00CA6B0B /* Assets.xcassets */; };
 		33A54A5822A1A03B00CA6B0B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 33A54A5622A1A03B00CA6B0B /* LaunchScreen.storyboard */; };
 		33A54A5B22A1A03B00CA6B0B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 33A54A5A22A1A03B00CA6B0B /* main.m */; };
+		33A54A6322A1A29E00CA6B0B /* DSHViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 33A54A6222A1A29E00CA6B0B /* DSHViewController.m */; };
+		33A54A6622A1A2EE00CA6B0B /* DSHNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 33A54A6522A1A2EE00CA6B0B /* DSHNavigationController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -23,6 +25,10 @@
 		33A54A5722A1A03B00CA6B0B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		33A54A5922A1A03B00CA6B0B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		33A54A5A22A1A03B00CA6B0B /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		33A54A6122A1A29E00CA6B0B /* DSHViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DSHViewController.h; sourceTree = "<group>"; };
+		33A54A6222A1A29E00CA6B0B /* DSHViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DSHViewController.m; sourceTree = "<group>"; };
+		33A54A6422A1A2EE00CA6B0B /* DSHNavigationController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DSHNavigationController.h; sourceTree = "<group>"; };
+		33A54A6522A1A2EE00CA6B0B /* DSHNavigationController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DSHNavigationController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,6 +63,10 @@
 			children = (
 				33A54A4B22A1A03A00CA6B0B /* AppDelegate.h */,
 				33A54A4C22A1A03A00CA6B0B /* AppDelegate.m */,
+				33A54A6122A1A29E00CA6B0B /* DSHViewController.h */,
+				33A54A6222A1A29E00CA6B0B /* DSHViewController.m */,
+				33A54A6422A1A2EE00CA6B0B /* DSHNavigationController.h */,
+				33A54A6522A1A2EE00CA6B0B /* DSHNavigationController.m */,
 				33A54A5122A1A03A00CA6B0B /* Main.storyboard */,
 				33A54A5422A1A03B00CA6B0B /* Assets.xcassets */,
 				33A54A5622A1A03B00CA6B0B /* LaunchScreen.storyboard */,
@@ -138,6 +148,8 @@
 			files = (
 				33A54A5B22A1A03B00CA6B0B /* main.m in Sources */,
 				33A54A4D22A1A03A00CA6B0B /* AppDelegate.m in Sources */,
+				33A54A6322A1A29E00CA6B0B /* DSHViewController.m in Sources */,
+				33A54A6622A1A2EE00CA6B0B /* DSHNavigationController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

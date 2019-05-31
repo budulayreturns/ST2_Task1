@@ -7,6 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "DSHViewController.h"
+#import "DSHNavigationController.h"
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 

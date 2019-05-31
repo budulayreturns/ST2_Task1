@@ -14,6 +14,8 @@
 		33A54A5B22A1A03B00CA6B0B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 33A54A5A22A1A03B00CA6B0B /* main.m */; };
 		33A54A6322A1A29E00CA6B0B /* DSHViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 33A54A6222A1A29E00CA6B0B /* DSHViewController.m */; };
 		33A54A6622A1A2EE00CA6B0B /* DSHNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 33A54A6522A1A2EE00CA6B0B /* DSHNavigationController.m */; };
+		33A54A6A22A1B41600CA6B0B /* DSHScrollViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 33A54A6822A1B41600CA6B0B /* DSHScrollViewController.m */; };
+		33A54A6B22A1B41600CA6B0B /* DSHScrollViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 33A54A6922A1B41600CA6B0B /* DSHScrollViewController.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -29,6 +31,9 @@
 		33A54A6222A1A29E00CA6B0B /* DSHViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DSHViewController.m; sourceTree = "<group>"; };
 		33A54A6422A1A2EE00CA6B0B /* DSHNavigationController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DSHNavigationController.h; sourceTree = "<group>"; };
 		33A54A6522A1A2EE00CA6B0B /* DSHNavigationController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DSHNavigationController.m; sourceTree = "<group>"; };
+		33A54A6722A1B41600CA6B0B /* DSHScrollViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DSHScrollViewController.h; sourceTree = "<group>"; };
+		33A54A6822A1B41600CA6B0B /* DSHScrollViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DSHScrollViewController.m; sourceTree = "<group>"; };
+		33A54A6922A1B41600CA6B0B /* DSHScrollViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DSHScrollViewController.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,6 +70,9 @@
 				33A54A4C22A1A03A00CA6B0B /* AppDelegate.m */,
 				33A54A6122A1A29E00CA6B0B /* DSHViewController.h */,
 				33A54A6222A1A29E00CA6B0B /* DSHViewController.m */,
+				33A54A6722A1B41600CA6B0B /* DSHScrollViewController.h */,
+				33A54A6822A1B41600CA6B0B /* DSHScrollViewController.m */,
+				33A54A6922A1B41600CA6B0B /* DSHScrollViewController.xib */,
 				33A54A6422A1A2EE00CA6B0B /* DSHNavigationController.h */,
 				33A54A6522A1A2EE00CA6B0B /* DSHNavigationController.m */,
 				33A54A5122A1A03A00CA6B0B /* Main.storyboard */,
@@ -134,6 +142,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				33A54A5822A1A03B00CA6B0B /* LaunchScreen.storyboard in Resources */,
+				33A54A6B22A1B41600CA6B0B /* DSHScrollViewController.xib in Resources */,
 				33A54A5522A1A03B00CA6B0B /* Assets.xcassets in Resources */,
 				33A54A5322A1A03A00CA6B0B /* Main.storyboard in Resources */,
 			);
@@ -149,6 +158,7 @@
 				33A54A5B22A1A03B00CA6B0B /* main.m in Sources */,
 				33A54A4D22A1A03A00CA6B0B /* AppDelegate.m in Sources */,
 				33A54A6322A1A29E00CA6B0B /* DSHViewController.m in Sources */,
+				33A54A6A22A1B41600CA6B0B /* DSHScrollViewController.m in Sources */,
 				33A54A6622A1A2EE00CA6B0B /* DSHNavigationController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

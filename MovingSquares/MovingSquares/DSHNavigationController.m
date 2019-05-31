@@ -14,14 +14,10 @@
 
 @implementation DSHNavigationController
 
-static NSString *kDisplayName = @"Moving Square";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-
-    [self setTitle:kDisplayName];
+   
 }
-
 
 @end

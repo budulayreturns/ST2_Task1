@@ -14,11 +14,24 @@
 
 @implementation DSHViewController
 
+static NSString *kDisplayTitle = @"Moving Square";
+
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self setTitle:kDisplayTitle];
     [self.view setBackgroundColor:[UIColor grayColor]];
+    UIBarButtonItem *addButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd
+                                                                                   target:self
+                                                                                   action:@selector(showDSHListViewController)];
+    self.navigationItem.rightBarButtonItem = addButtonItem;
 }
 
+- (void) showDSHListViewController {
+    DSHScrollViewController *svc = [[DSHScrollViewController alloc] initWithNibName:@"DSHScrollViewController" bundle:nil];
+    if (svc) {
+        [self.navigationController pushViewController:svc animated:YES];
+    }
+}
 /*
 #pragma mark - Navigation
 

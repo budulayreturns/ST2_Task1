@@ -1,5 +1,5 @@
 //
-//  DSHViewController.h
+//  DSHScrollViewController.h
 //  MovingSquares
 //
 //  Created by Дмитрий on 5/31/19.
@@ -7,11 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "DSHScrollViewController.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface DSHViewController : UIViewController
+@interface DSHScrollViewController : UIViewController
 
 @end
 

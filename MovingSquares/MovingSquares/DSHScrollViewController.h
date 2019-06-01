@@ -7,11 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "DSHCustomView.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface DSHScrollViewController : UIViewController
-
+@property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 @end
 
 NS_ASSUME_NONNULL_END

@@ -16,6 +16,7 @@
 		33A54A6622A1A2EE00CA6B0B /* DSHNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 33A54A6522A1A2EE00CA6B0B /* DSHNavigationController.m */; };
 		33A54A6A22A1B41600CA6B0B /* DSHScrollViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 33A54A6822A1B41600CA6B0B /* DSHScrollViewController.m */; };
 		33A54A6B22A1B41600CA6B0B /* DSHScrollViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 33A54A6922A1B41600CA6B0B /* DSHScrollViewController.xib */; };
+		33A54A6E22A1C2FD00CA6B0B /* DSHCustomView.m in Sources */ = {isa = PBXBuildFile; fileRef = 33A54A6D22A1C2FD00CA6B0B /* DSHCustomView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,6 +35,8 @@
 		33A54A6722A1B41600CA6B0B /* DSHScrollViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DSHScrollViewController.h; sourceTree = "<group>"; };
 		33A54A6822A1B41600CA6B0B /* DSHScrollViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DSHScrollViewController.m; sourceTree = "<group>"; };
 		33A54A6922A1B41600CA6B0B /* DSHScrollViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DSHScrollViewController.xib; sourceTree = "<group>"; };
+		33A54A6C22A1C2FD00CA6B0B /* DSHCustomView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DSHCustomView.h; sourceTree = "<group>"; };
+		33A54A6D22A1C2FD00CA6B0B /* DSHCustomView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DSHCustomView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -70,6 +73,8 @@
 				33A54A4C22A1A03A00CA6B0B /* AppDelegate.m */,
 				33A54A6122A1A29E00CA6B0B /* DSHViewController.h */,
 				33A54A6222A1A29E00CA6B0B /* DSHViewController.m */,
+				33A54A6C22A1C2FD00CA6B0B /* DSHCustomView.h */,
+				33A54A6D22A1C2FD00CA6B0B /* DSHCustomView.m */,
 				33A54A6722A1B41600CA6B0B /* DSHScrollViewController.h */,
 				33A54A6822A1B41600CA6B0B /* DSHScrollViewController.m */,
 				33A54A6922A1B41600CA6B0B /* DSHScrollViewController.xib */,
@@ -160,6 +165,7 @@
 				33A54A6322A1A29E00CA6B0B /* DSHViewController.m in Sources */,
 				33A54A6A22A1B41600CA6B0B /* DSHScrollViewController.m in Sources */,
 				33A54A6622A1A2EE00CA6B0B /* DSHNavigationController.m in Sources */,
+				33A54A6E22A1C2FD00CA6B0B /* DSHCustomView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

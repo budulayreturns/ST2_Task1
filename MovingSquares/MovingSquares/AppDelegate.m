@@ -20,7 +20,7 @@
     DSHNavigationController *nc = [[DSHNavigationController alloc]initWithRootViewController:vc];
     [window setRootViewController:nc];
     [window makeKeyAndVisible];
-    self.window = window;
+    self.window = window; 
     return YES;
 }
 

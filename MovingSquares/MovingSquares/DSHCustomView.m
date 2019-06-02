@@ -12,6 +12,7 @@
 @property (nonatomic, weak) UILabel *textLabel;
 @property (nonatomic, copy, readwrite) NSString *urlDescription;
 @property (nonatomic, strong, readwrite) UIImage *image;
+@property (nonatomic, assign, getter=isDragging) BOOL dragging;
 @end
 
 @implementation DSHCustomView
@@ -38,42 +39,48 @@
     }
 }
 
-- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
-    NSLog(@"Began");
-    //[NSLayoutConstraint deactivateConstraints:@[]];
-   NSLog(@"%@", self.constraints);
-    [super touchesBegan:touches withEvent:event];
-}
-
-- (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
-    NSLog(@"Ended");
-   
-   // self.superview
-    
-    [super touchesEnded:touches withEvent:event];
-}
 
 - (void)touchesMoved:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
-    
-    UITouch *touch = [[event allTouches] anyObject];
-    CGPoint touchLocation = [touch locationInView:self];
-    
-    touch locationInView:<#(nullable UIView *)#>
     NSLog(@"Moved");
+    UITouch *touch = [[event allTouches] anyObject];
+    CGPoint touchLocation = [touch locationInView:self.superview];
+    if ([[touch.view class] isSubclassOfClass:[DSHCustomView class]]) {
+
+        
+        
+    }
     
-    
-//    [NSLayoutConstraint activateConstraints:@[
-//                                              [self.centerXAnchor constraintEqualToAnchor:],
-//                                              [self.centerYAnchor constraintEqualToAnchor:]
-    
-    
-    
+    NSLog(@"Child x:%f y:%f,",self.frame.origin.x, self.frame.origin.x);
+    NSLog(@"Super x:%f y:%f,",touchLocation.x, touchLocation.y);
+ 
     [super touchesMoved:touches withEvent:event];
 }
 
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    UITouch *touch = [[event allTouches] anyObject];
+    if ([[touch.view class] isSubclassOfClass:[DSHCustomView class]]) {
+        NSLog(@"Touches began: %@", ((DSHCustomView*)touch.view).urlDescription);
+        [self setDragging:YES];
+    }
+    [super touchesBegan:touches withEvent:event];
+}
+
 - (void)touchesCancelled:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
-    NSLog(@"Cancelled");
+    UITouch *touch = [[event allTouches] anyObject];
+    if ([[touch.view class] isSubclassOfClass:[DSHCustomView class]]) {
+        NSLog(@"Touches cancelled: %@", ((DSHCustomView*)touch.view).urlDescription);
+        [self setDragging:NO];
+    }
     [super touchesCancelled:touches withEvent:event];
+}
+
+- (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    UITouch *touch = [[event allTouches] anyObject];
+    if ([[touch.view class] isSubclassOfClass:[DSHCustomView class]]) {
+        NSLog(@"Touches ended: %@", ((DSHCustomView*)touch.view).urlDescription);
+        [self setDragging:NO];
+    }
+    [super touchesEnded:touches withEvent:event];
 }
 
 - (NSString*) urlDescription {

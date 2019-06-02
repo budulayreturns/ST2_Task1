@@ -9,14 +9,15 @@
 #import "DSHCustomView.h"
 
 @interface DSHCustomView ()
-@property (nonatomic, weak) UILabel *textLabel;
 @property (nonatomic, copy, readwrite) NSString *urlDescription;
 @property (nonatomic, strong, readwrite) UIImage *image;
 @property (nonatomic, assign, getter=isDragging) BOOL dragging;
+@property (nonatomic, assign) CGPoint oldTouchLocation;
 @end
 
 @implementation DSHCustomView
 
+CGPoint oldPosition;
 
 - (instancetype)initWithImage:(UIImage*)image andDescription: (NSString*) description 
 {
@@ -31,7 +32,6 @@
 - (void)drawRect:(CGRect)rect {
     if (self.image) {
         [self.image drawInRect:self.bounds];
-        
         //[self.image drawInRect:self.bounds];
         //self.contentMode = UIViewContentModeScaleAspectFill;
         //[self setNeedsDisplay];
@@ -42,19 +42,15 @@
 
 - (void)touchesMoved:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
     UITouch *touch = [[event allTouches] anyObject];
-    CGPoint touchLocation = [touch locationInView:self.superview];
-    if ([[touch.view class] isSubclassOfClass:[DSHCustomView class]]) {
-        NSLog(@"Touch began: %@", ((DSHCustomView*)touch.view).urlDescription);
-    }
+//    if ([[touch.view class] isSubclassOfClass:[DSHCustomView class]]) {
+//        NSLog(@"Touch moved: %@", ((DSHCustomView*)touch.view).urlDescription);
+//    }
     if (self.isDragging) {
-        
-        CGFloat offsetX = self.center.x;
-        CGFloat offsetY = self.center.y;
-        
-        self.center = touchLocation;
-        
-        NSLog(@"Child x:%f y:%f,",self.center.x, self.center.y);
-        NSLog(@"Super x:%f y:%f,",touchLocation.x, touchLocation.y);
+        CGPoint touchLocation = [touch locationInView:self.superview];
+        CGPoint newPoint = CGPointMake(self.center.x + (touchLocation.x - self.oldTouchLocation.x),
+                                      self.center.y + (touchLocation.y - self.oldTouchLocation.y));
+        self.center = CGPointMake(newPoint.x, newPoint.y);
+        self.oldTouchLocation = [touch locationInView:self.superview];
     }
     [super touchesMoved:touches withEvent:event];
 }
@@ -63,8 +59,9 @@
     UITouch *touch = [[event allTouches] anyObject];
     if ([[touch.view class] isSubclassOfClass:[DSHCustomView class]]) {
         NSLog(@"Touch began: %@", ((DSHCustomView*)touch.view).urlDescription);
+        self.oldTouchLocation = [touch locationInView:self.superview];
+        [self.superview bringSubviewToFront:self];
         [self setDragging:YES];
-       
     }
     [super touchesBegan:touches withEvent:event];
 }
@@ -74,7 +71,6 @@
     if ([[touch.view class] isSubclassOfClass:[DSHCustomView class]]) {
         NSLog(@"Touch cancelled: %@", ((DSHCustomView*)touch.view).urlDescription);
         [self setDragging:NO];
-        
     }
     [super touchesCancelled:touches withEvent:event];
 }
@@ -84,7 +80,6 @@
     if ([[touch.view class] isSubclassOfClass:[DSHCustomView class]]) {
         NSLog(@"Touch ended: %@", ((DSHCustomView*)touch.view).urlDescription);
         [self setDragging:NO];
-        
     }
     [super touchesEnded:touches withEvent:event];
 }

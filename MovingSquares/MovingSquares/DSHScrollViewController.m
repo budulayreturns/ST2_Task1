@@ -98,7 +98,6 @@ static NSString *kDisplayTitle = @"Select Item";
     }
 }
 
-
 - (void) addTapGestureToDSHCCustomView: (DSHCustomView *) view {
     UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] init];
     [tapGesture addTarget:self action:@selector(tapGestureToDSHCustomView:)];
@@ -110,7 +109,7 @@ static NSString *kDisplayTitle = @"Select Item";
         if ([sender.view isMemberOfClass:[DSHCustomView class]]){
             __weak DSHScrollViewController *selfWeak = self;
             [self closeDSHScrollViewController:^{
-                NSLog(@"%@", selfWeak.navigationController.viewControllers);
+                //NSLog(@"%@", selfWeak.navigationController.viewControllers);
                 [selfWeak.delegate createDSHCustomViewWithImageName:((DSHCustomView*)sender.view).image.accessibilityIdentifier andUrlDescription:((DSHCustomView*) sender.view).urlDescription];
             }];
         }

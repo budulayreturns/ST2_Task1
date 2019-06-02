@@ -17,9 +17,9 @@
 @implementation DSHCustomView
 
 
-- (instancetype)initWithImage:(UIImage*)image andDescription: (NSString*) description //andPosition: (CGPoint) position
+- (instancetype)initWithImage:(UIImage*)image andDescription: (NSString*) description 
 {
-    self = [super initWithFrame:CGRectZero]; //CGRectMake(0, 0, image.size.width, image.size.height)];
+    self = [super initWithFrame:CGRectZero];
     if (self) {
         _image = image;
         _urlDescription = description;
@@ -30,8 +30,50 @@
 - (void)drawRect:(CGRect)rect {
     if (self.image) {
         [self.image drawInRect:self.bounds];
-        [self sizeToFit];
+        
+        //[self.image drawInRect:self.bounds];
+        //self.contentMode = UIViewContentModeScaleAspectFill;
+        //[self setNeedsDisplay];
+        //[self sizeToFit];
     }
+}
+
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    NSLog(@"Began");
+    //[NSLayoutConstraint deactivateConstraints:@[]];
+   NSLog(@"%@", self.constraints);
+    [super touchesBegan:touches withEvent:event];
+}
+
+- (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    NSLog(@"Ended");
+   
+   // self.superview
+    
+    [super touchesEnded:touches withEvent:event];
+}
+
+- (void)touchesMoved:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    
+    UITouch *touch = [[event allTouches] anyObject];
+    CGPoint touchLocation = [touch locationInView:self];
+    
+    touch locationInView:<#(nullable UIView *)#>
+    NSLog(@"Moved");
+    
+    
+//    [NSLayoutConstraint activateConstraints:@[
+//                                              [self.centerXAnchor constraintEqualToAnchor:],
+//                                              [self.centerYAnchor constraintEqualToAnchor:]
+    
+    
+    
+    [super touchesMoved:touches withEvent:event];
+}
+
+- (void)touchesCancelled:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    NSLog(@"Cancelled");
+    [super touchesCancelled:touches withEvent:event];
 }
 
 - (NSString*) urlDescription {

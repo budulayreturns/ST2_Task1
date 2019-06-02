@@ -38,12 +38,12 @@ CGPoint oldPosition;
     }
 }
 
-
 - (void)touchesMoved:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
     UITouch *touch = [[event allTouches] anyObject];
-//    if ([[touch.view class] isSubclassOfClass:[DSHCustomView class]]) {
-//        NSLog(@"Touch moved: %@", ((DSHCustomView*)touch.view).urlDescription);
-//    }
+    if ([[touch.view class] isSubclassOfClass:[DSHCustomView class]]) {
+        NSLog(@"Touch moved: %@", ((DSHCustomView*)touch.view).urlDescription);
+        [self removeDSHCustomViewConstraintsInSuperview];
+    }
     if (self.isDragging) {
         CGPoint touchLocation = [touch locationInView:self.superview];
         CGPoint newPoint = CGPointMake(self.center.x + (touchLocation.x - self.oldTouchLocation.x),
@@ -58,11 +58,9 @@ CGPoint oldPosition;
     UITouch *touch = [[event allTouches] anyObject];
     if ([[touch.view class] isSubclassOfClass:[DSHCustomView class]]) {
         NSLog(@"Touch began: %@", ((DSHCustomView*)touch.view).urlDescription);
-        //[self.superview bringSubviewToFront:self];
         self.oldTouchLocation = [touch locationInView:self.superview];
         [self setDragging:YES];
-        [self removeDSHCustomViewConstraintsInSuperview];
-        
+        [self.superview bringSubviewToFront:self];
     }
     [super touchesBegan:touches withEvent:event];
 }
@@ -97,7 +95,7 @@ CGPoint oldPosition;
                                               [self.centerXAnchor constraintEqualToAnchor:self.superview.centerXAnchor constant:self.center.x - self.superview.center.x],
                                               [self.centerYAnchor constraintEqualToAnchor:self.superview.centerYAnchor constant:self.center.y - self.superview.center.y]
                                               ]];
-    [self layoutIfNeeded];
+    [self setNeedsDisplay];
 }
 
 - (void) removeDSHCustomViewConstraintsInSuperview {
@@ -108,6 +106,7 @@ CGPoint oldPosition;
             [self.superview removeConstraint:constraint];
         }
     }];
+    [self.superview setNeedsDisplay];
 }
 
 @end

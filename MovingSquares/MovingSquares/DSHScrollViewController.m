@@ -75,6 +75,7 @@ static NSString *kDisplayTitle = @"Select Item";
 
 - (DSHCustomView*) createDSHCustomViewWithImage: (UIImage*) image andUrlDescriprion:(NSString*) urlDescription {
     DSHCustomView *view = [[DSHCustomView alloc]initWithImage:image andDescription:urlDescription];
+    view.userInteractionEnabled = YES;
     [view setBackgroundColor:[UIColor redColor]];
     [self addTapGestureToDSHCCustomView:view];
     [self addUILabelToDSHCustomView:view];
@@ -139,6 +140,7 @@ static NSString *kDisplayTitle = @"Select Item";
                                               [label.trailingAnchor constraintEqualToAnchor:view.safeAreaLayoutGuide.trailingAnchor],
                                               [label.bottomAnchor constraintEqualToAnchor:view.safeAreaLayoutGuide.bottomAnchor constant:-8.0]
                                               ]];
+    [label layoutIfNeeded];
 }
 
 - (void) setConstraintsToDSHCustomView: (DSHCustomView*) view inUIScrollView: (UIScrollView*) scrollView andHeight: (CGFloat) height {
@@ -149,6 +151,7 @@ static NSString *kDisplayTitle = @"Select Item";
                                               [view.heightAnchor constraintEqualToConstant:((DSHCustomView*)view).image.size.height],
                                               [view.topAnchor constraintEqualToAnchor: scrollView.topAnchor constant:height]
                                               ]];
+    [view layoutIfNeeded];
 }
 
 - (void) setUIScrollViewConstraints {
@@ -158,6 +161,7 @@ static NSString *kDisplayTitle = @"Select Item";
                                               [self.scrollView.trailingAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.trailingAnchor],
                                               [self.scrollView.topAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.topAnchor],
                                               [self.scrollView.bottomAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.bottomAnchor]]];
+    [self.scrollView layoutIfNeeded];
 }
 
 - (void) viewDidLayoutSubviews {

@@ -41,26 +41,30 @@
 
 
 - (void)touchesMoved:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
-    NSLog(@"Moved");
     UITouch *touch = [[event allTouches] anyObject];
     CGPoint touchLocation = [touch locationInView:self.superview];
     if ([[touch.view class] isSubclassOfClass:[DSHCustomView class]]) {
-
-        
-        
+        NSLog(@"Touch began: %@", ((DSHCustomView*)touch.view).urlDescription);
     }
-    
-    NSLog(@"Child x:%f y:%f,",self.frame.origin.x, self.frame.origin.x);
-    NSLog(@"Super x:%f y:%f,",touchLocation.x, touchLocation.y);
- 
+    if (self.isDragging) {
+        
+        CGFloat offsetX = self.center.x;
+        CGFloat offsetY = self.center.y;
+        
+        self.center = touchLocation;
+        
+        NSLog(@"Child x:%f y:%f,",self.center.x, self.center.y);
+        NSLog(@"Super x:%f y:%f,",touchLocation.x, touchLocation.y);
+    }
     [super touchesMoved:touches withEvent:event];
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
     UITouch *touch = [[event allTouches] anyObject];
     if ([[touch.view class] isSubclassOfClass:[DSHCustomView class]]) {
-        NSLog(@"Touches began: %@", ((DSHCustomView*)touch.view).urlDescription);
+        NSLog(@"Touch began: %@", ((DSHCustomView*)touch.view).urlDescription);
         [self setDragging:YES];
+       
     }
     [super touchesBegan:touches withEvent:event];
 }
@@ -68,8 +72,9 @@
 - (void)touchesCancelled:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
     UITouch *touch = [[event allTouches] anyObject];
     if ([[touch.view class] isSubclassOfClass:[DSHCustomView class]]) {
-        NSLog(@"Touches cancelled: %@", ((DSHCustomView*)touch.view).urlDescription);
+        NSLog(@"Touch cancelled: %@", ((DSHCustomView*)touch.view).urlDescription);
         [self setDragging:NO];
+        
     }
     [super touchesCancelled:touches withEvent:event];
 }
@@ -77,8 +82,9 @@
 - (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
     UITouch *touch = [[event allTouches] anyObject];
     if ([[touch.view class] isSubclassOfClass:[DSHCustomView class]]) {
-        NSLog(@"Touches ended: %@", ((DSHCustomView*)touch.view).urlDescription);
+        NSLog(@"Touch ended: %@", ((DSHCustomView*)touch.view).urlDescription);
         [self setDragging:NO];
+        
     }
     [super touchesEnded:touches withEvent:event];
 }

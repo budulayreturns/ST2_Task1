@@ -59,13 +59,11 @@ static NSString *kDisplayTitle = @"Moving Square";
     DSHCustomView *view = [[DSHCustomView alloc]initWithImage:image andDescription:urlDescription];
     view.userInteractionEnabled = YES;
     [self createTapGestureToDSHCustomView:view];
-//    [self resetZPositionOfChildViews];
-//    [self setZPosition:1.0 ToDSHCustomView:view];
     [self.view addSubview:view];
     [self setConstraintsToDSHCustomView:view];
     
     //view.contentMode = UIViewContentModeScaleAspectFill;
-    //[view setFrame:CGRectMake(self.view.center.x, self.view.center.y, view.frame.size.width, view.frame.size.height)];
+    //[view setFrame:CGRectMake(self.view.center.x, self.view.center.y, view.image.size.width, view.image.size.height)];
     //[view setNeedsDisplay];
 }
 
@@ -76,8 +74,7 @@ static NSString *kDisplayTitle = @"Moving Square";
                                               [view.heightAnchor constraintEqualToConstant:100.0],
                                               [view.centerXAnchor constraintEqualToAnchor:self.view.centerXAnchor],
                                               [view.centerYAnchor constraintEqualToAnchor:self.view.centerYAnchor]
-                                              ]]; //размеры
-    [view layoutIfNeeded];
+                                              ]];
 }
 
 - (void) createTapGestureToDSHCustomView: (DSHCustomView*) view {
@@ -92,21 +89,10 @@ static NSString *kDisplayTitle = @"Moving Square";
     if(sender.view){
         if([sender.view isMemberOfClass:[DSHCustomView class]]) {
             [self setDisplayTitleName:((DSHCustomView*)sender.view).urlDescription];
-//            [self resetZPositionOfChildViews];
-//            [self setZPosition:1.0 ToDSHCustomView:(DSHCustomView*)sender.view];
         }
         
     }
 }
 
-//- (void) setZPosition: (CGFloat) position ToDSHCustomView: (DSHCustomView*) view {
-//    view.layer.zPosition = position;
-//}
-//
-//- (void) resetZPositionOfChildViews {
-//    [self.view.subviews enumerateObjectsWithOptions:0 usingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-//        obj.layer.zPosition = 0;
-//    }];
-//}
 
 @end

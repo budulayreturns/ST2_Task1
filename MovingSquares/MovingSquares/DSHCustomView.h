@@ -11,6 +11,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface DSHCustomView : UIView
+@property (nonatomic, assign) BOOL draggingEnabled;
 @property (nonatomic, strong, readonly) UIImage *image;
 @property (nonatomic, copy, readonly) NSString *urlDescription;
 - (instancetype)initWithImage:(UIImage*)image andDescription: (NSString*) description;

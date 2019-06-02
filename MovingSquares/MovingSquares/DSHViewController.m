@@ -58,6 +58,7 @@ static NSString *kDisplayTitle = @"Moving Square";
     [self setDisplayTitleName:urlDescription];
     DSHCustomView *view = [[DSHCustomView alloc]initWithImage:image andDescription:urlDescription];
     view.userInteractionEnabled = YES;
+    view.draggingEnabled = YES;
     [self createTapGestureToDSHCustomView:view];
     [self.view addSubview:view];
     [self setConstraintsToDSHCustomView:view];

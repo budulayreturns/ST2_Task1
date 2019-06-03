@@ -112,7 +112,7 @@ static NSString *kDisplayTitle = @"Moving Square";
     [self setConstantX:view.center.x - self.view.center.x constantY:view.center.y - self.view.center.y to:view];
 }
 
-- (void)createDSHCustomViewWithImageName:(NSString *)imageName urlDescription:(NSString *)urlDescription {
+- (void)createCustomViewWithImageName:(NSString *)imageName urlDescription:(NSString *)urlDescription {
     UIImage *image = [UIImage imageNamed:imageName];
     image.accessibilityIdentifier = imageName;
     [self setDisplayTitleName:urlDescription];

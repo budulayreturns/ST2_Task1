@@ -62,7 +62,7 @@ static NSString *kDisplayTitle = @"Select Item";
             __weak DSHScrollViewController *selfWeak = self;
             [self closeScrollViewController:^{
                 //NSLog(@"%@", selfWeak.navigationController.viewControllers);
-                [selfWeak.delegate createDSHCustomViewWithImageName:((DSHCustomView*)sender.view).image.accessibilityIdentifier urlDescription:((DSHCustomView*) sender.view).urlDescription];
+                [selfWeak.delegate createCustomViewWithImageName:((DSHCustomView*)sender.view).image.accessibilityIdentifier urlDescription:((DSHCustomView*) sender.view).urlDescription];
             }];
         }
     }

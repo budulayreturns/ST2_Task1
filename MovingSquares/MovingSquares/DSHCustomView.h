@@ -15,11 +15,13 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 @interface DSHCustomView : UIView
-@property (nonatomic, assign) BOOL draggingEnabled;
-@property (nonatomic, strong, readonly) UIImage *image;
 @property (nonatomic, copy, readonly) NSString *urlDescription;
-@property (nonatomic, weak) id<DSHCustomViewPositionChangeProtocol>delegate;
-- (instancetype)initWithImage:(UIImage*)image andDescription:(NSString *)description;
+@property (nonatomic, assign, getter=isDraggingEnabled) BOOL draggingEnabled;
+@property (nonatomic, assign, getter=isTextHidden) BOOL textHidden;
+@property (nonatomic, strong, readonly) UIImage *image;
+
+@property (nonatomic, weak) id<DSHCustomViewPositionChangeProtocol> delegate;
+- (instancetype)initWithImage:(UIImage*)image description:(NSString *)description;
 @end
 
 NS_ASSUME_NONNULL_END

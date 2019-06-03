@@ -116,17 +116,15 @@ static NSString *kDisplayTitle = @"Moving Square";
     UIImage *image = [UIImage imageNamed:imageName];
     image.accessibilityIdentifier = imageName;
     [self setDisplayTitleName:urlDescription];
-    DSHCustomView *view = [[DSHCustomView alloc]initWithImage:image andDescription:urlDescription];
+    DSHCustomView *view = [[DSHCustomView alloc]initWithImage:image description:urlDescription];
     view.delegate = self;
     view.userInteractionEnabled = YES;
+    view.textHidden = YES;
     view.draggingEnabled = YES;
     [self createTapGestureTo:view];
     [self.view addSubview:view];
     [self setWidth:130.0 height:100.0 to:view];
     [self setConstantX:0 constantY:0 to:view];
-    //view.contentMode = UIViewContentModeScaleAspectFill;
-    //[view setFrame:CGRectMake(self.view.center.x, self.view.center.y, view.image.size.width, view.image.size.height)];
-    //[view setNeedsDisplay];
 }
 
 @end

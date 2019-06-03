@@ -9,49 +9,62 @@
 #import "DSHCustomView.h"
 
 @interface DSHCustomView ()
-@property (nonatomic, copy, readwrite) NSString *urlDescription;
+
 @property (nonatomic, strong, readwrite) UIImage *image;
 @property (nonatomic, assign, getter=isDragging) BOOL dragging;
 @property (nonatomic, assign) CGPoint oldTouchLocation;
+@property (nonatomic, weak) UILabel *label;
 @end
 
 @implementation DSHCustomView
 
 CGPoint oldPosition;
 
+
 #pragma mark - Lifecycle
 
-- (instancetype)initWithImage:(UIImage *)image andDescription:(NSString *) description
+- (instancetype)initWithImage:(UIImage *)image description:(NSString *)description
 {
     self = [super initWithFrame:CGRectZero];
     if (self) {
+        UILabel *label = [[UILabel alloc]init];
+        label.text = description;
+        [self setup:label];
+        [self addSubview:label];
+        _label = label;
         _image = image;
-        _urlDescription = description;
         _draggingEnabled = NO;
+        _textHidden = NO;
     }
     return self;
+}
+
+- (void)updateConstraints {
+    [super updateConstraints];
+    [self setConstraintsToLabel];
 }
 
 - (void)drawRect:(CGRect)rect {
     if (self.image) {
         [self.image drawInRect:self.bounds];
-        //self.contentMode = UIViewContentModeScaleAspectFill;
-        //[self setNeedsDisplay];
-        //[self sizeToFit];
     }
 }
 
 #pragma mark - Custom accesories
 
 - (NSString *)urlDescription {
-    return _urlDescription ? _urlDescription: @"undefined" ;
+    return self.label.text;
+}
+
+- (void) setTextHidden:(BOOL)textHidden {
+    [self.label setHidden:textHidden];
 }
 
 
 #pragma mark - Event handlers
 
 - (void)touchesMoved:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
-    if ([self draggingEnabled]) {
+    if ([self isDraggingEnabled]) {
         UITouch *touch = [[event allTouches] anyObject];
         if ([[touch.view class] isSubclassOfClass:[DSHCustomView class]]) {
             NSLog(@"Touch moved: %@", ((DSHCustomView*)touch.view).urlDescription);
@@ -69,7 +82,7 @@ CGPoint oldPosition;
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
-    if ([self draggingEnabled]) {
+    if ([self isDraggingEnabled]) {
         UITouch *touch = [[event allTouches] anyObject];
         if ([[touch.view class] isSubclassOfClass:[DSHCustomView class]]) {
             NSLog(@"Touch began: %@", ((DSHCustomView*)touch.view).urlDescription);
@@ -83,7 +96,7 @@ CGPoint oldPosition;
 
 
 - (void)touchesCancelled:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
-    if ([self draggingEnabled]) {
+    if ([self isDraggingEnabled]) {
         UITouch *touch = [[event allTouches] anyObject];
         if ([[touch.view class] isSubclassOfClass:[DSHCustomView class]]) {
             NSLog(@"Touch cancelled: %@", ((DSHCustomView*)touch.view).urlDescription);
@@ -94,12 +107,11 @@ CGPoint oldPosition;
 }
 
 - (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
-    if ([self draggingEnabled]) {
+    if ([self isDraggingEnabled]) {
         UITouch *touch = [[event allTouches] anyObject];
         if ([[touch.view class] isSubclassOfClass:[DSHCustomView class]]) {
             NSLog(@"Touch ended: %@", ((DSHCustomView*)touch.view).urlDescription);
             [self setDragging:NO];
-            //[self setupConstraints];
         }
     }
     [super touchesEnded:touches withEvent:event];
@@ -107,6 +119,26 @@ CGPoint oldPosition;
 
 #pragma mark - Private methods
 
+- (void)setup:(UILabel *)label {
+    if (label) {
+        label.textAlignment = NSTextAlignmentLeft;
+        label.numberOfLines = 1;
+        label.textColor = [UIColor whiteColor];
+        [label setContentCompressionResistancePriority:UILayoutPriorityDefaultLow
+                                               forAxis:UILayoutConstraintAxisHorizontal];
+        label.adjustsFontSizeToFitWidth = YES;
+        label.minimumScaleFactor = .5f;
+    }
+}
 
+- (void)setConstraintsToLabel {
+    self.label.translatesAutoresizingMaskIntoConstraints = NO;
+    [NSLayoutConstraint activateConstraints:@[
+                                              [self.label.leadingAnchor constraintEqualToAnchor:self.safeAreaLayoutGuide.leadingAnchor],
+                                              [self.label.trailingAnchor constraintEqualToAnchor:self.safeAreaLayoutGuide.trailingAnchor],
+                                              [self.label.bottomAnchor constraintEqualToAnchor:self.safeAreaLayoutGuide.bottomAnchor constant:-8.0]
+                                              ]];
+    [self layoutIfNeeded];
+}
 
 @end

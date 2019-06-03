@@ -79,22 +79,6 @@ static NSString *kDisplayTitle = @"Select Item";
     }
 }
 
-- (void) addUILabelToDSHCustomView:(DSHCustomView *)view{
-    if (view) {
-        UILabel *label = [[UILabel alloc]init];
-        label.textAlignment = NSTextAlignmentLeft;
-        label.numberOfLines = 1;
-        label.textColor = [UIColor whiteColor];
-        label.text = view.urlDescription;
-        [label setContentCompressionResistancePriority:UILayoutPriorityDefaultLow
-                                               forAxis:UILayoutConstraintAxisHorizontal];
-        label.adjustsFontSizeToFitWidth = YES;
-        label.minimumScaleFactor = .5f;
-        [view addSubview:label];
-        [self setConstraintsToUILabel:label inDSHCustomView:view];
-    }
-}
-
 - (void)addTapGestureToDSHCCustomView:(DSHCustomView *)view {
     UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] init];
     [tapGesture addTarget:self action:@selector(tapGestureToDSHCustomView:)];
@@ -110,15 +94,6 @@ static NSString *kDisplayTitle = @"Select Item";
     }
 }
 
-- (void)setConstraintsToUILabel:(UILabel *)label inDSHCustomView:(DSHCustomView *)view {
-    label.translatesAutoresizingMaskIntoConstraints = NO;
-    [NSLayoutConstraint activateConstraints:@[
-                                              [label.leadingAnchor constraintEqualToAnchor:view.safeAreaLayoutGuide.leadingAnchor],
-                                              [label.trailingAnchor constraintEqualToAnchor:view.safeAreaLayoutGuide.trailingAnchor],
-                                              [label.bottomAnchor constraintEqualToAnchor:view.safeAreaLayoutGuide.bottomAnchor constant:-8.0]
-                                              ]];
-    [label layoutIfNeeded];
-}
 
 - (void)setConstraintsToDSHCustomView:(DSHCustomView *) view inUIScrollView:(UIScrollView *)scrollView andHeight:(CGFloat)height {
     view.translatesAutoresizingMaskIntoConstraints = NO;
@@ -183,11 +158,10 @@ static NSString *kDisplayTitle = @"Select Item";
 #pragma mark - Protocol conformance
 
 - (DSHCustomView *)createDSHCustomViewWithImage:(UIImage *) image andUrlDescriprion:(NSString *)urlDescription {
-    DSHCustomView *view = [[DSHCustomView alloc]initWithImage:image andDescription:urlDescription];
+    DSHCustomView *view = [[DSHCustomView alloc]initWithImage:image description:urlDescription];
     view.userInteractionEnabled = YES;
     [view setBackgroundColor:[UIColor redColor]];
     [self addTapGestureToDSHCCustomView:view];
-    [self addUILabelToDSHCustomView:view];
     return view;
 }
 

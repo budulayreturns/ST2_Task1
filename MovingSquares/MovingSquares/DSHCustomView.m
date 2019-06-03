@@ -9,7 +9,7 @@
 #import "DSHCustomView.h"
 
 @interface DSHCustomView ()
-
+@property (nonatomic,assign) BOOL shouldUpdateConstraints;
 @property (nonatomic, strong, readwrite) UIImage *image;
 @property (nonatomic, assign, getter=isDragging) BOOL dragging;
 @property (nonatomic, assign) CGPoint oldTouchLocation;
@@ -35,13 +35,17 @@ CGPoint oldPosition;
         _image = image;
         _draggingEnabled = NO;
         _textHidden = NO;
+        _shouldUpdateConstraints = YES;
     }
     return self;
 }
 
 - (void)updateConstraints {
     [super updateConstraints];
-    [self setConstraintsToLabel];
+    if (self.shouldUpdateConstraints) {
+        [self setConstraintsToLabel];
+        self.shouldUpdateConstraints = NO;
+    }
 }
 
 - (void)drawRect:(CGRect)rect {
@@ -60,6 +64,16 @@ CGPoint oldPosition;
     [self.label setHidden:textHidden];
 }
 
+#pragma mark - Actions
+
+//- (void)tapGestureFrom:(UIGestureRecognizer *)sender {
+//    if(sender.view){
+//        if([sender.view isMemberOfClass:[DSHCustomView class]]) {
+//            [self.delegate tapGestureFrom:sender];
+//        }
+//
+//    }
+//}
 
 #pragma mark - Event handlers
 
@@ -141,4 +155,9 @@ CGPoint oldPosition;
     [self layoutIfNeeded];
 }
 
+//- (void) addTapGesture {
+//    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] init];
+//    [tapGesture addTarget:self action:@selector(tapGestureFrom:)];
+//    [self addGestureRecognizer:tapGesture];
+//}
 @end

@@ -7,14 +7,19 @@
 //
 
 #import <UIKit/UIKit.h>
+@class DSHCustomView;
 
 NS_ASSUME_NONNULL_BEGIN
+@protocol DSHCustomViewPositionChangeProtocol<NSObject>
+- (void)didDSHCustomViewChanged:(DSHCustomView* )view;
+@end
 
 @interface DSHCustomView : UIView
 @property (nonatomic, assign) BOOL draggingEnabled;
 @property (nonatomic, strong, readonly) UIImage *image;
 @property (nonatomic, copy, readonly) NSString *urlDescription;
-- (instancetype)initWithImage:(UIImage*)image andDescription: (NSString*) description;
+@property (nonatomic, weak) id<DSHCustomViewPositionChangeProtocol>delegate;
+- (instancetype)initWithImage:(UIImage*)image andDescription:(NSString *)description;
 @end
 
 NS_ASSUME_NONNULL_END

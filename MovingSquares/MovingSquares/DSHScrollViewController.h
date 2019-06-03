@@ -11,13 +11,13 @@
 
 
 NS_ASSUME_NONNULL_BEGIN
-@protocol DSHCustomViewCreationProtocol <NSObject>
-- (void) createDSHCustomViewWithImageName: (NSString*) imageName andUrlDescription: (NSString*) urlDescription;
+@protocol DSHCustomViewCreationProtocol<NSObject>
+- (void)createDSHCustomViewWithImageName:(NSString* )imageName andUrlDescription:(NSString *)urlDescription;
 @end
 
 @interface DSHScrollViewController : UIViewController
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
-@property (nonatomic, weak) id <DSHCustomViewCreationProtocol> delegate;
+@property (nonatomic, weak) id<DSHCustomViewCreationProtocol> delegate;
 @end
 
 NS_ASSUME_NONNULL_END

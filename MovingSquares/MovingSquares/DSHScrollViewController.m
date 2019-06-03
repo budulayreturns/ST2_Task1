@@ -17,7 +17,135 @@
 
 static NSString *kDisplayTitle = @"Select Item";
 
-- (NSDictionary *) getImageDataDictionary {
+#pragma mark - Lifecycle
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    self.imagePathsDictionary = [self getImageDataDictionary];
+    [self setTitle:kDisplayTitle];
+    [self.view setBackgroundColor:[UIColor darkGrayColor]];
+    UIBarButtonItem *closeButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Close" style:UIBarButtonItemStylePlain target:self action:@selector(tapToCloseButton)];
+    self.navigationItem.rightBarButtonItem = closeButtonItem;
+    self.navigationItem.hidesBackButton = YES;
+    [self addDSHCCustomViews];
+    
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self setUIScrollViewConstraints];
+}
+
+- (void)viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
+    CGFloat height = 8.0;
+    CGFloat width = self.scrollView.frame.size.width;
+    for (UIView *view in self.scrollView.subviews) {
+        if ([view isMemberOfClass:[DSHCustomView class]]){
+            [self setConstraintsToDSHCustomView:(DSHCustomView*)view inUIScrollView:self.scrollView andHeight:height];
+            height += ((DSHCustomView*)view).image.size.height+8.0;
+            width = ((DSHCustomView*)view).image.size.width > width ? ((DSHCustomView*)view).image.size.width : width;
+        }
+    }
+    [self setDSHScrollViewContentWidth:width andHeight:height];
+}
+
+#pragma mark - Actions
+
+- (void) tapToCloseButton {
+    [self closeDSHScrollViewController:nil];
+}
+
+- (void)tapGestureToDSHCustomView:(UIGestureRecognizer *)sender {
+    if (sender.view) {
+        if ([sender.view isMemberOfClass:[DSHCustomView class]]){
+            __weak DSHScrollViewController *selfWeak = self;
+            [self closeDSHScrollViewController:^{
+                //NSLog(@"%@", selfWeak.navigationController.viewControllers);
+                [selfWeak.delegate createDSHCustomViewWithImageName:((DSHCustomView*)sender.view).image.accessibilityIdentifier andUrlDescription:((DSHCustomView*) sender.view).urlDescription];
+            }];
+        }
+    }
+}
+
+#pragma mark - Private methods
+
+- (void) addDSHCCustomViews {
+    for (NSNumber *key in self.imagePathsDictionary.allKeys) {
+        UIImage *image = [UIImage imageNamed:[key stringValue]];
+        image.accessibilityIdentifier = [key stringValue];
+        DSHCustomView *view = [self createDSHCustomViewWithImage:image andUrlDescriprion:self.imagePathsDictionary[key]];
+        [self.scrollView addSubview:view];
+    }
+}
+
+- (void) addUILabelToDSHCustomView:(DSHCustomView *)view{
+    if (view) {
+        UILabel *label = [[UILabel alloc]init];
+        label.textAlignment = NSTextAlignmentLeft;
+        label.numberOfLines = 1;
+        label.textColor = [UIColor whiteColor];
+        label.text = view.urlDescription;
+        [label setContentCompressionResistancePriority:UILayoutPriorityDefaultLow
+                                               forAxis:UILayoutConstraintAxisHorizontal];
+        label.adjustsFontSizeToFitWidth = YES;
+        label.minimumScaleFactor = .5f;
+        [view addSubview:label];
+        [self setConstraintsToUILabel:label inDSHCustomView:view];
+    }
+}
+
+- (void)addTapGestureToDSHCCustomView:(DSHCustomView *)view {
+    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] init];
+    [tapGesture addTarget:self action:@selector(tapGestureToDSHCustomView:)];
+    [view addGestureRecognizer:tapGesture];
+}
+
+
+
+- (void)closeDSHScrollViewController:(void (^)(void))completion {
+    [self.navigationController popViewControllerAnimated:YES];
+    if (completion) {
+        completion();
+    }
+}
+
+- (void)setConstraintsToUILabel:(UILabel *)label inDSHCustomView:(DSHCustomView *)view {
+    label.translatesAutoresizingMaskIntoConstraints = NO;
+    [NSLayoutConstraint activateConstraints:@[
+                                              [label.leadingAnchor constraintEqualToAnchor:view.safeAreaLayoutGuide.leadingAnchor],
+                                              [label.trailingAnchor constraintEqualToAnchor:view.safeAreaLayoutGuide.trailingAnchor],
+                                              [label.bottomAnchor constraintEqualToAnchor:view.safeAreaLayoutGuide.bottomAnchor constant:-8.0]
+                                              ]];
+    [label layoutIfNeeded];
+}
+
+- (void)setConstraintsToDSHCustomView:(DSHCustomView *) view inUIScrollView:(UIScrollView *)scrollView andHeight:(CGFloat)height {
+    view.translatesAutoresizingMaskIntoConstraints = NO;
+    [NSLayoutConstraint activateConstraints:@[
+                                              [view.centerXAnchor constraintEqualToAnchor:scrollView.centerXAnchor],
+                                              [view.widthAnchor constraintEqualToConstant:((DSHCustomView*)view).image.size.width],
+                                              [view.heightAnchor constraintEqualToConstant:((DSHCustomView*)view).image.size.height],
+                                              [view.topAnchor constraintEqualToAnchor: scrollView.topAnchor constant:height]
+                                              ]];
+    [view layoutIfNeeded];
+}
+
+- (void)setUIScrollViewConstraints {
+    self.scrollView.translatesAutoresizingMaskIntoConstraints = NO;
+    [NSLayoutConstraint activateConstraints:@[
+                                              [self.scrollView.leadingAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.leadingAnchor],
+                                              [self.scrollView.trailingAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.trailingAnchor],
+                                              [self.scrollView.topAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.topAnchor],
+                                              [self.scrollView.bottomAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.bottomAnchor]]];
+    [self.scrollView layoutIfNeeded];
+}
+
+- (void)setDSHScrollViewContentWidth:(CGFloat)width andHeight:(CGFloat)height {
+    self.scrollView.contentSize = CGSizeMake(width, height);
+}
+
+- (NSDictionary *)getImageDataDictionary {
     return @{
              @0:@"https://loremflickr.com/320/240/0",
              @1:@"https://loremflickr.com/320/240/1",
@@ -52,134 +180,15 @@ static NSString *kDisplayTitle = @"Select Item";
              };
 }
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    self.imagePathsDictionary = [self getImageDataDictionary];
-    [self setTitle:kDisplayTitle];
-    [self.view setBackgroundColor:[UIColor darkGrayColor]];
-    UIBarButtonItem *closeButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Close" style:UIBarButtonItemStylePlain target:self action:@selector(tapToCloseButton)];
-    self.navigationItem.rightBarButtonItem = closeButtonItem;
-    self.navigationItem.hidesBackButton = YES;
-    [self addDSHCCustomViews];
-    
-}
+#pragma mark - Protocol conformance
 
-- (void) addDSHCCustomViews {
-    for (NSNumber *key in self.imagePathsDictionary.allKeys) {
-        UIImage *image = [UIImage imageNamed:[key stringValue]];
-        image.accessibilityIdentifier = [key stringValue];
-        DSHCustomView *view = [self createDSHCustomViewWithImage:image andUrlDescriprion:self.imagePathsDictionary[key]];
-        [self.scrollView addSubview:view];
-    }
-}
-
-- (DSHCustomView*) createDSHCustomViewWithImage: (UIImage*) image andUrlDescriprion:(NSString*) urlDescription {
+- (DSHCustomView *)createDSHCustomViewWithImage:(UIImage *) image andUrlDescriprion:(NSString *)urlDescription {
     DSHCustomView *view = [[DSHCustomView alloc]initWithImage:image andDescription:urlDescription];
     view.userInteractionEnabled = YES;
     [view setBackgroundColor:[UIColor redColor]];
     [self addTapGestureToDSHCCustomView:view];
     [self addUILabelToDSHCustomView:view];
     return view;
-}
-
-- (void) addUILabelToDSHCustomView: (DSHCustomView*) view{
-    if (view) {
-        UILabel *label = [[UILabel alloc]init];
-        label.textAlignment = NSTextAlignmentLeft;
-        label.numberOfLines = 1;
-        label.textColor = [UIColor whiteColor];
-        label.text = view.urlDescription;
-        [label setContentCompressionResistancePriority:UILayoutPriorityDefaultLow
-                                               forAxis:UILayoutConstraintAxisHorizontal];
-        label.adjustsFontSizeToFitWidth = YES;
-        label.minimumScaleFactor = .5f;
-        [view addSubview:label];
-        [self setConstraintsToUILabel:label inDSHCustomView:view];
-    }
-}
-
-- (void) addTapGestureToDSHCCustomView: (DSHCustomView *) view {
-    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] init];
-    [tapGesture addTarget:self action:@selector(tapGestureToDSHCustomView:)];
-    [view addGestureRecognizer:tapGesture];
-}
-
-- (void) tapGestureToDSHCustomView: (UIGestureRecognizer*) sender {
-    if (sender.view) {
-        if ([sender.view isMemberOfClass:[DSHCustomView class]]){
-            __weak DSHScrollViewController *selfWeak = self;
-            [self closeDSHScrollViewController:^{
-                //NSLog(@"%@", selfWeak.navigationController.viewControllers);
-                [selfWeak.delegate createDSHCustomViewWithImageName:((DSHCustomView*)sender.view).image.accessibilityIdentifier andUrlDescription:((DSHCustomView*) sender.view).urlDescription];
-            }];
-        }
-    }
-}
-
-- (void) tapToCloseButton {
-    [self closeDSHScrollViewController:nil];
-}
-
-- (void) closeDSHScrollViewController: (void (^)(void)) completion {
-    [self.navigationController popViewControllerAnimated:YES];
-    if (completion) {
-        completion();
-    }
-}
-
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    [self setUIScrollViewConstraints];
-}
-
-- (void) setConstraintsToUILabel: (UILabel*) label inDSHCustomView: (DSHCustomView*) view {
-    label.translatesAutoresizingMaskIntoConstraints = NO;
-    [NSLayoutConstraint activateConstraints:@[
-                                              [label.leadingAnchor constraintEqualToAnchor:view.safeAreaLayoutGuide.leadingAnchor],
-                                              [label.trailingAnchor constraintEqualToAnchor:view.safeAreaLayoutGuide.trailingAnchor],
-                                              [label.bottomAnchor constraintEqualToAnchor:view.safeAreaLayoutGuide.bottomAnchor constant:-8.0]
-                                              ]];
-    [label layoutIfNeeded];
-}
-
-- (void) setConstraintsToDSHCustomView: (DSHCustomView*) view inUIScrollView: (UIScrollView*) scrollView andHeight: (CGFloat) height {
-    view.translatesAutoresizingMaskIntoConstraints = NO;
-    [NSLayoutConstraint activateConstraints:@[
-                                              [view.centerXAnchor constraintEqualToAnchor:scrollView.centerXAnchor],
-                                              [view.widthAnchor constraintEqualToConstant:((DSHCustomView*)view).image.size.width],
-                                              [view.heightAnchor constraintEqualToConstant:((DSHCustomView*)view).image.size.height],
-                                              [view.topAnchor constraintEqualToAnchor: scrollView.topAnchor constant:height]
-                                              ]];
-    [view layoutIfNeeded];
-}
-
-- (void) setUIScrollViewConstraints {
-    self.scrollView.translatesAutoresizingMaskIntoConstraints = NO;
-    [NSLayoutConstraint activateConstraints:@[
-                                              [self.scrollView.leadingAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.leadingAnchor],
-                                              [self.scrollView.trailingAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.trailingAnchor],
-                                              [self.scrollView.topAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.topAnchor],
-                                              [self.scrollView.bottomAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.bottomAnchor]]];
-    [self.scrollView layoutIfNeeded];
-}
-
-- (void) viewDidLayoutSubviews {
-    [super viewDidLayoutSubviews];
-    CGFloat height = 8.0;
-    CGFloat width = self.scrollView.frame.size.width;
-    for (UIView *view in self.scrollView.subviews) {
-        if ([view isMemberOfClass:[DSHCustomView class]]){
-            [self setConstraintsToDSHCustomView:(DSHCustomView*)view inUIScrollView:self.scrollView andHeight:height];
-            height += ((DSHCustomView*)view).image.size.height+8.0;
-            width = ((DSHCustomView*)view).image.size.width > width ? ((DSHCustomView*)view).image.size.width : width;
-        }
-    }
-    [self setDSHScrollViewContentWidth:width andHeight:height];
-}
-
-
-- (void) setDSHScrollViewContentWidth: (CGFloat) width andHeight: (CGFloat) height {
-    self.scrollView.contentSize = CGSizeMake(width, height);
 }
 
 @end

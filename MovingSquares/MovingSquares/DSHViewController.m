@@ -9,13 +9,15 @@
 #import "DSHViewController.h"
 
 
-@interface DSHViewController () <DSHCustomViewCreationProtocol>
+@interface DSHViewController () <DSHCustomViewCreationProtocol, DSHCustomViewPositionChangeProtocol>
 
 @end
 
 @implementation DSHViewController
 
 static NSString *kDisplayTitle = @"Moving Square";
+
+#pragma mark - Lifestyle
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -28,65 +30,21 @@ static NSString *kDisplayTitle = @"Moving Square";
     [self createTapGestureToSetDefaultTitle];
 }
 
-- (void) setDisplayTitleName: (NSString*) name {
+#pragma mark - Custom accessories
+
+- (void)setDisplayTitleName:(NSString *)name {
     if (![self.title isEqualToString:name]) {
         [self setTitle:name];
     }
 }
 
-- (void) showDSHScrollViewController {
-    DSHScrollViewController *svc = [[DSHScrollViewController alloc] initWithNibName:@"DSHScrollViewController" bundle:nil];
-    if (svc) {
-        svc.delegate = self;
-        [self.navigationController pushViewController:svc animated:YES];
-    }
-}
+#pragma mark - Actions
 
-- (void) createTapGestureToSetDefaultTitle {
-    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] init];
-    [tapGesture addTarget:self action:@selector(tapGestureToView)];
-    [self.view addGestureRecognizer:tapGesture];
-}
-
-- (void) tapGestureToView {
+- (void)tapGestureToView {
     [self setDisplayTitleName:kDisplayTitle];
 }
 
-- (void)createDSHCustomViewWithImageName:(NSString *)imageName andUrlDescription:(NSString *)urlDescription {
-    UIImage *image = [UIImage imageNamed:imageName];
-    image.accessibilityIdentifier = imageName;
-    [self setDisplayTitleName:urlDescription];
-    DSHCustomView *view = [[DSHCustomView alloc]initWithImage:image andDescription:urlDescription];
-    view.userInteractionEnabled = YES;
-    view.draggingEnabled = YES;
-    [self createTapGestureToDSHCustomView:view];
-    [self.view addSubview:view];
-    [self setConstraintsToDSHCustomView:view];
-    
-    //view.contentMode = UIViewContentModeScaleAspectFill;
-    //[view setFrame:CGRectMake(self.view.center.x, self.view.center.y, view.image.size.width, view.image.size.height)];
-    //[view setNeedsDisplay];
-}
-
-- (void) setConstraintsToDSHCustomView: (DSHCustomView*) view {
-    view.translatesAutoresizingMaskIntoConstraints = NO;
-    [NSLayoutConstraint activateConstraints:@[
-                                              [view.widthAnchor constraintEqualToConstant:130.0],
-                                              [view.heightAnchor constraintEqualToConstant:100.0],
-                                              [view.centerXAnchor constraintEqualToAnchor:self.view.centerXAnchor],
-                                              [view.centerYAnchor constraintEqualToAnchor:self.view.centerYAnchor]
-                                              ]];
-}
-
-- (void) createTapGestureToDSHCustomView: (DSHCustomView*) view {
-    if (view) {
-    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] init];
-    [tapGesture addTarget:self action:@selector(tapGestureToDSHCustomView:)];
-        [view addGestureRecognizer:tapGesture];
-    }
-}
-
-- (void) tapGestureToDSHCustomView: (UIGestureRecognizer*) sender {
+- (void)tapGestureToDSHCustomView:(UIGestureRecognizer *)sender {
     if(sender.view){
         if([sender.view isMemberOfClass:[DSHCustomView class]]) {
             [self setDisplayTitleName:((DSHCustomView*)sender.view).urlDescription];
@@ -95,5 +53,80 @@ static NSString *kDisplayTitle = @"Moving Square";
     }
 }
 
+- (void)showDSHScrollViewController {
+    DSHScrollViewController *svc = [[DSHScrollViewController alloc] initWithNibName:@"DSHScrollViewController" bundle:nil];
+    if (svc) {
+        svc.delegate = self;
+        [self.navigationController pushViewController:svc animated:YES];
+    }
+}
+
+#pragma mark - Private methods
+
+- (void)createTapGestureToSetDefaultTitle {
+    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] init];
+    [tapGesture addTarget:self action:@selector(tapGestureToView)];
+    [self.view addGestureRecognizer:tapGesture];
+}
+
+- (void)createTapGestureTo:(DSHCustomView *)view {
+    if (view) {
+    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] init];
+    [tapGesture addTarget:self action:@selector(tapGestureToDSHCustomView:)];
+        [view addGestureRecognizer:tapGesture];
+    }
+}
+
+- (void)setWidth:(CGFloat)width height:(CGFloat)height to:(DSHCustomView *)view {
+    view.translatesAutoresizingMaskIntoConstraints = NO;
+    [NSLayoutConstraint activateConstraints:@[
+                                              [view.widthAnchor constraintEqualToConstant:width],
+                                              [view.heightAnchor constraintEqualToConstant:height],
+                                              ]];
+}
+
+- (void)setConstantX:(CGFloat)constantX constantY:(CGFloat)constantY to:(DSHCustomView *)view {
+    view.translatesAutoresizingMaskIntoConstraints = NO;
+    [NSLayoutConstraint activateConstraints:@[
+                                              [view.centerXAnchor constraintEqualToAnchor:self.view.centerXAnchor constant:constantX],
+                                              [view.centerYAnchor constraintEqualToAnchor:self.view.centerYAnchor constant:constantY]
+                                              ]];
+}
+
+- (void)removeCenterXYConstraintsFrom:(DSHCustomView *)view {
+    __weak DSHViewController *weakSelf = self;
+    [self.view.constraints enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        NSLayoutConstraint *constraint = (NSLayoutConstraint *)obj;
+        if (constraint.firstItem == view || constraint.secondItem == view) {
+            [weakSelf.view removeConstraint:constraint];
+        }
+    }];
+    [self.view updateConstraintsIfNeeded];
+}
+
+
+#pragma mark - Protocol conformance
+
+- (void)didDSHCustomViewChanged:(DSHCustomView *)view {
+    [self removeCenterXYConstraintsFrom:view];
+    [self setConstantX:view.center.x - self.view.center.x constantY:view.center.y - self.view.center.y to:view];
+}
+
+- (void)createDSHCustomViewWithImageName:(NSString *)imageName andUrlDescription:(NSString *)urlDescription {
+    UIImage *image = [UIImage imageNamed:imageName];
+    image.accessibilityIdentifier = imageName;
+    [self setDisplayTitleName:urlDescription];
+    DSHCustomView *view = [[DSHCustomView alloc]initWithImage:image andDescription:urlDescription];
+    view.delegate = self;
+    view.userInteractionEnabled = YES;
+    view.draggingEnabled = YES;
+    [self createTapGestureTo:view];
+    [self.view addSubview:view];
+    [self setWidth:130.0 height:100.0 to:view];
+    [self setConstantX:0 constantY:0 to:view];
+    //view.contentMode = UIViewContentModeScaleAspectFill;
+    //[view setFrame:CGRectMake(self.view.center.x, self.view.center.y, view.image.size.width, view.image.size.height)];
+    //[view setNeedsDisplay];
+}
 
 @end

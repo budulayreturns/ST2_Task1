@@ -19,7 +19,9 @@
 
 CGPoint oldPosition;
 
-- (instancetype)initWithImage:(UIImage*)image andDescription: (NSString*) description 
+#pragma mark - Lifecycle
+
+- (instancetype)initWithImage:(UIImage *)image andDescription:(NSString *) description
 {
     self = [super initWithFrame:CGRectZero];
     if (self) {
@@ -39,12 +41,20 @@ CGPoint oldPosition;
     }
 }
 
+#pragma mark - Custom accesories
+
+- (NSString *)urlDescription {
+    return _urlDescription ? _urlDescription: @"undefined" ;
+}
+
+
+#pragma mark - Event handlers
+
 - (void)touchesMoved:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
     if ([self draggingEnabled]) {
         UITouch *touch = [[event allTouches] anyObject];
         if ([[touch.view class] isSubclassOfClass:[DSHCustomView class]]) {
             NSLog(@"Touch moved: %@", ((DSHCustomView*)touch.view).urlDescription);
-            [self removeDSHCustomViewConstraintsInSuperview];
         }
         if (self.isDragging) {
             CGPoint touchLocation = [touch locationInView:self.superview];
@@ -52,6 +62,7 @@ CGPoint oldPosition;
                                           self.center.y + (touchLocation.y - self.oldTouchLocation.y));
             self.center = CGPointMake(newPoint.x, newPoint.y);
             self.oldTouchLocation = [touch locationInView:self.superview];
+            [self.delegate didDSHCustomViewChanged:self];
         }
     }
     [super touchesMoved:touches withEvent:event];
@@ -63,7 +74,6 @@ CGPoint oldPosition;
         if ([[touch.view class] isSubclassOfClass:[DSHCustomView class]]) {
             NSLog(@"Touch began: %@", ((DSHCustomView*)touch.view).urlDescription);
             self.oldTouchLocation = [touch locationInView:self.superview];
-            
             [self setDragging:YES];
             [self.superview bringSubviewToFront:self];
         }
@@ -71,13 +81,13 @@ CGPoint oldPosition;
     [super touchesBegan:touches withEvent:event];
 }
 
+
 - (void)touchesCancelled:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
     if ([self draggingEnabled]) {
         UITouch *touch = [[event allTouches] anyObject];
         if ([[touch.view class] isSubclassOfClass:[DSHCustomView class]]) {
             NSLog(@"Touch cancelled: %@", ((DSHCustomView*)touch.view).urlDescription);
             [self setDragging:NO];
-            [self setupConstraints];
         }
     }
     [super touchesCancelled:touches withEvent:event];
@@ -89,34 +99,14 @@ CGPoint oldPosition;
         if ([[touch.view class] isSubclassOfClass:[DSHCustomView class]]) {
             NSLog(@"Touch ended: %@", ((DSHCustomView*)touch.view).urlDescription);
             [self setDragging:NO];
-            [self setupConstraints];
+            //[self setupConstraints];
         }
     }
     [super touchesEnded:touches withEvent:event];
 }
 
-- (NSString*) urlDescription {
-    return _urlDescription ? _urlDescription: @"undefined" ;
-}
+#pragma mark - Private methods
 
-- (void) setupConstraints {
-    self.translatesAutoresizingMaskIntoConstraints = NO;
-    [NSLayoutConstraint activateConstraints:@[
-                                              [self.centerXAnchor constraintEqualToAnchor:self.superview.centerXAnchor constant:self.center.x - self.superview.center.x],
-                                              [self.centerYAnchor constraintEqualToAnchor:self.superview.centerYAnchor constant:self.center.y - self.superview.center.y]
-                                              ]];
-    [self layoutIfNeeded];
-}
 
-- (void) removeDSHCustomViewConstraintsInSuperview {
-    __weak DSHCustomView* weakSelf = self;
-    [self.superview.constraints enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        NSLayoutConstraint *constraint = (NSLayoutConstraint *)obj;
-        if (constraint.firstItem == weakSelf || constraint.secondItem == weakSelf) {
-            [self.superview removeConstraint:constraint];
-        }
-    }];
-    [self.superview layoutIfNeeded];
-}
 
 @end

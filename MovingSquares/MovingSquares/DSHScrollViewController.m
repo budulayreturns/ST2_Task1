@@ -27,13 +27,13 @@ static NSString *kDisplayTitle = @"Select Item";
     UIBarButtonItem *closeButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Close" style:UIBarButtonItemStylePlain target:self action:@selector(tapToCloseButton)];
     self.navigationItem.rightBarButtonItem = closeButtonItem;
     self.navigationItem.hidesBackButton = YES;
-    [self addDSHCCustomViews];
+    [self addCustomViewsToSuperView];
     
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    [self setUIScrollViewConstraints];
+    [self setScrollViewConstraints];
 }
 
 - (void)viewDidLayoutSubviews {
@@ -42,27 +42,27 @@ static NSString *kDisplayTitle = @"Select Item";
     CGFloat width = self.scrollView.frame.size.width;
     for (UIView *view in self.scrollView.subviews) {
         if ([view isMemberOfClass:[DSHCustomView class]]){
-            [self setConstraintsToDSHCustomView:(DSHCustomView*)view inUIScrollView:self.scrollView andHeight:height];
+            [self setConstraintsToCustomView:(DSHCustomView*)view inScrollView:self.scrollView height:height];
             height += ((DSHCustomView*)view).image.size.height+8.0;
             width = ((DSHCustomView*)view).image.size.width > width ? ((DSHCustomView*)view).image.size.width : width;
         }
     }
-    [self setDSHScrollViewContentWidth:width andHeight:height];
+    [self setScrollViewContentWidth:width height:height];
 }
 
 #pragma mark - Actions
 
 - (void) tapToCloseButton {
-    [self closeDSHScrollViewController:nil];
+    [self closeScrollViewController:nil];
 }
 
-- (void)tapGestureToDSHCustomView:(UIGestureRecognizer *)sender {
+- (void)tapGestureToCustomView:(UIGestureRecognizer *)sender {
     if (sender.view) {
         if ([sender.view isMemberOfClass:[DSHCustomView class]]){
             __weak DSHScrollViewController *selfWeak = self;
-            [self closeDSHScrollViewController:^{
+            [self closeScrollViewController:^{
                 //NSLog(@"%@", selfWeak.navigationController.viewControllers);
-                [selfWeak.delegate createDSHCustomViewWithImageName:((DSHCustomView*)sender.view).image.accessibilityIdentifier andUrlDescription:((DSHCustomView*) sender.view).urlDescription];
+                [selfWeak.delegate createDSHCustomViewWithImageName:((DSHCustomView*)sender.view).image.accessibilityIdentifier urlDescription:((DSHCustomView*) sender.view).urlDescription];
             }];
         }
     }
@@ -70,24 +70,24 @@ static NSString *kDisplayTitle = @"Select Item";
 
 #pragma mark - Private methods
 
-- (void) addDSHCCustomViews {
+- (void) addCustomViewsToSuperView {
     for (NSNumber *key in self.imagePathsDictionary.allKeys) {
         UIImage *image = [UIImage imageNamed:[key stringValue]];
         image.accessibilityIdentifier = [key stringValue];
-        DSHCustomView *view = [self createDSHCustomViewWithImage:image andUrlDescriprion:self.imagePathsDictionary[key]];
+        DSHCustomView *view = [self createCustomViewWithImage:image urlDescriprion:self.imagePathsDictionary[key]];
         [self.scrollView addSubview:view];
     }
 }
 
-- (void)addTapGestureToDSHCCustomView:(DSHCustomView *)view {
+- (void)addTapGestureToCustomView:(DSHCustomView *)view {
     UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] init];
-    [tapGesture addTarget:self action:@selector(tapGestureToDSHCustomView:)];
+    [tapGesture addTarget:self action:@selector(tapGestureToCustomView:)];
     [view addGestureRecognizer:tapGesture];
 }
 
 
 
-- (void)closeDSHScrollViewController:(void (^)(void))completion {
+- (void)closeScrollViewController:(void (^)(void))completion {
     [self.navigationController popViewControllerAnimated:YES];
     if (completion) {
         completion();
@@ -95,7 +95,7 @@ static NSString *kDisplayTitle = @"Select Item";
 }
 
 
-- (void)setConstraintsToDSHCustomView:(DSHCustomView *) view inUIScrollView:(UIScrollView *)scrollView andHeight:(CGFloat)height {
+- (void)setConstraintsToCustomView:(DSHCustomView *)view inScrollView:(UIScrollView *)scrollView height:(CGFloat)height {
     view.translatesAutoresizingMaskIntoConstraints = NO;
     [NSLayoutConstraint activateConstraints:@[
                                               [view.centerXAnchor constraintEqualToAnchor:scrollView.centerXAnchor],
@@ -106,7 +106,7 @@ static NSString *kDisplayTitle = @"Select Item";
     [view layoutIfNeeded];
 }
 
-- (void)setUIScrollViewConstraints {
+- (void)setScrollViewConstraints {
     self.scrollView.translatesAutoresizingMaskIntoConstraints = NO;
     [NSLayoutConstraint activateConstraints:@[
                                               [self.scrollView.leadingAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.leadingAnchor],
@@ -116,7 +116,7 @@ static NSString *kDisplayTitle = @"Select Item";
     [self.scrollView layoutIfNeeded];
 }
 
-- (void)setDSHScrollViewContentWidth:(CGFloat)width andHeight:(CGFloat)height {
+- (void)setScrollViewContentWidth:(CGFloat)width height:(CGFloat)height {
     self.scrollView.contentSize = CGSizeMake(width, height);
 }
 
@@ -157,11 +157,11 @@ static NSString *kDisplayTitle = @"Select Item";
 
 #pragma mark - Protocol conformance
 
-- (DSHCustomView *)createDSHCustomViewWithImage:(UIImage *) image andUrlDescriprion:(NSString *)urlDescription {
+- (DSHCustomView *)createCustomViewWithImage:(UIImage *) image urlDescriprion:(NSString *)urlDescription {
     DSHCustomView *view = [[DSHCustomView alloc]initWithImage:image description:urlDescription];
     view.userInteractionEnabled = YES;
     [view setBackgroundColor:[UIColor redColor]];
-    [self addTapGestureToDSHCCustomView:view];
+    [self addTapGestureToCustomView:view];
     return view;
 }
 

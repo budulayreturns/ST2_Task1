@@ -75,7 +75,7 @@ CGPoint oldPosition;
                                           self.center.y + (touchLocation.y - self.oldTouchLocation.y));
             self.center = CGPointMake(newPoint.x, newPoint.y);
             self.oldTouchLocation = [touch locationInView:self.superview];
-            [self.delegate didDSHCustomViewChanged:self];
+            [self.delegate didCustomViewChanged:self];
         }
     }
     [super touchesMoved:touches withEvent:event];

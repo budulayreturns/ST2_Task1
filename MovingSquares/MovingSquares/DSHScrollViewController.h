@@ -12,7 +12,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 @protocol DSHCustomViewCreationProtocol<NSObject>
-- (void)createDSHCustomViewWithImageName:(NSString* )imageName andUrlDescription:(NSString *)urlDescription;
+- (void)createDSHCustomViewWithImageName:(NSString* )imageName urlDescription:(NSString *)urlDescription;
 @end
 
 @interface DSHScrollViewController : UIViewController

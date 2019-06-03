@@ -11,7 +11,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 @protocol DSHCustomViewPositionChangeProtocol<NSObject>
-- (void)didDSHCustomViewChanged:(DSHCustomView* )view;
+- (void)didCustomViewChanged:(DSHCustomView* )view;
 @end
 
 @interface DSHCustomView : UIView
@@ -19,6 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign, getter=isDraggingEnabled) BOOL draggingEnabled;
 @property (nonatomic, assign, getter=isTextHidden) BOOL textHidden;
 @property (nonatomic, strong, readonly) UIImage *image;
+
 
 @property (nonatomic, weak) id<DSHCustomViewPositionChangeProtocol> delegate;
 - (instancetype)initWithImage:(UIImage*)image description:(NSString *)description;

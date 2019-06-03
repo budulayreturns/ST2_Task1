@@ -25,7 +25,7 @@ static NSString *kDisplayTitle = @"Moving Square";
     [self.view setBackgroundColor:[UIColor grayColor]];
     UIBarButtonItem *addButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd
                                                                                    target:self
-                                                                                   action:@selector(showDSHScrollViewController)];
+                                                                                   action:@selector(showScrollViewController)];
     self.navigationItem.rightBarButtonItem = addButtonItem;
     [self createTapGestureToSetDefaultTitle];
 }
@@ -44,7 +44,7 @@ static NSString *kDisplayTitle = @"Moving Square";
     [self setDisplayTitleName:kDisplayTitle];
 }
 
-- (void)tapGestureToDSHCustomView:(UIGestureRecognizer *)sender {
+- (void)tapGestureFrom:(UIGestureRecognizer *)sender {
     if(sender.view){
         if([sender.view isMemberOfClass:[DSHCustomView class]]) {
             [self setDisplayTitleName:((DSHCustomView*)sender.view).urlDescription];
@@ -53,7 +53,7 @@ static NSString *kDisplayTitle = @"Moving Square";
     }
 }
 
-- (void)showDSHScrollViewController {
+- (void)showScrollViewController {
     DSHScrollViewController *svc = [[DSHScrollViewController alloc] initWithNibName:@"DSHScrollViewController" bundle:nil];
     if (svc) {
         svc.delegate = self;
@@ -72,7 +72,7 @@ static NSString *kDisplayTitle = @"Moving Square";
 - (void)createTapGestureTo:(DSHCustomView *)view {
     if (view) {
     UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] init];
-    [tapGesture addTarget:self action:@selector(tapGestureToDSHCustomView:)];
+    [tapGesture addTarget:self action:@selector(tapGestureFrom:)];
         [view addGestureRecognizer:tapGesture];
     }
 }
@@ -107,12 +107,12 @@ static NSString *kDisplayTitle = @"Moving Square";
 
 #pragma mark - Protocol conformance
 
-- (void)didDSHCustomViewChanged:(DSHCustomView *)view {
+- (void)didCustomViewChanged:(DSHCustomView *)view {
     [self removeCenterXYConstraintsFrom:view];
     [self setConstantX:view.center.x - self.view.center.x constantY:view.center.y - self.view.center.y to:view];
 }
 
-- (void)createDSHCustomViewWithImageName:(NSString *)imageName andUrlDescription:(NSString *)urlDescription {
+- (void)createDSHCustomViewWithImageName:(NSString *)imageName urlDescription:(NSString *)urlDescription {
     UIImage *image = [UIImage imageNamed:imageName];
     image.accessibilityIdentifier = imageName;
     [self setDisplayTitleName:urlDescription];
